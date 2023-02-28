@@ -3,6 +3,7 @@ const startEmployeesRoutes = (app) => {
     var router = require("express").Router();
     router.get("/", employee.findEmployees);
     router.get("/:id", employee.findEmployeeByID);
+    router.post("/", employee.insertEmployee);
 
     app.use('/api/v1/employees', router);
 }

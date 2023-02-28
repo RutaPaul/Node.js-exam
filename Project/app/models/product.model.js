@@ -31,5 +31,17 @@ Product.findProducts = (id, result) => {
     });
 };
 
+Product.insertProduct = (newProduct, result) => {
+  sql.query("INSERT INTO PRODUCTS SET ?", newProduct, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    console.log("created product: ", { id: res.insertId, ...newProduct });
+    result(null, { id: res.insertId, ...newProduct });
+  });
+};
 
 module.exports = Product;

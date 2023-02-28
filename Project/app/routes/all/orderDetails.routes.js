@@ -3,6 +3,7 @@ const startOrderDetailsRoutes = (app) => {
     var router = require("express").Router();
     router.get("/", orderDetail.findOrderDetails);
     router.get("/:id", orderDetail.findOrderDetailByOrderID);
+    router.post("/", orderDetail.insertOrderDetail);
     
 
     app.use('/api/v1/orderDetails', router);

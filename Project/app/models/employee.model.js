@@ -32,8 +32,20 @@ Employee.findEmployees = (id, result) => {
 
         result({ message: "not_found" }, null);
       });
-}
+};
 
+Employee.insertEmployee = (newEmployee, result) => {
+  sql.query("INSERT INTO EMPLOYEES SET ?", newEmployee, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    console.log("created employee: ", { id: res.insertId, ...newEmployee });
+    result(null, { id: res.insertId, ...newEmployee });
+  });
+};
 
 
 

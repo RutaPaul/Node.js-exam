@@ -29,6 +29,18 @@ Order.findOrders = (id, result) => {
       });
 }
 
+Order.insertOrder = (newOrder, result) => {
+  sql.query("INSERT INTO ORDERS SET ?", newOrder, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    console.log("created order: ", { id: res.insertId, ...newOrder });
+    result(null, { id: res.insertId, ...newOrder });
+  });
+}
 
 
 

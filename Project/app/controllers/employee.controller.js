@@ -35,3 +35,36 @@ exports.findEmployeeByID = (req, res) => {
         };
   });
 };
+
+exports.insertEmployee = (req, res) => {
+  ValidateRequest(req, res);
+
+  const employee = new Employee({
+    EmployeeID: req.body.EmployeeID,
+    LastName: req.body.LastName,
+    FirstName: req.body.FirstName,
+    Title: req.body.Title,
+    TitleOfCourtesy: req.body.TitleOfCourtesy,
+    BirthDate: req.body.BirthDate,
+    HireDate: req.body.HireDate,
+    Address: req.body.Address,
+    City: req.body.City
+  });
+
+  Employee.insertEmployee(employee, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating new employee."
+      });
+    else res.send(data);
+  });
+};
+
+function ValidateRequest(req, res) {
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  };
+};

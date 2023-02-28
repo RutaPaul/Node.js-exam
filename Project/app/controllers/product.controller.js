@@ -36,3 +36,33 @@ exports.findProductByID = (req, res) => {
           };
     });
 };
+
+exports.insertProduct = (req, res) => {
+  ValidateRequest(req, res);
+
+  const product = new Product({
+    ProductID: req.body.ProductID,
+    ProductName: req.body.ProductName,
+    SupplierID: req.body.SupplierID,
+    CategoryID: req.body.CategoryID,
+    QuantityPerUnit: req.body.QuantityPerUnit,
+    UnitPrice: req.body.UnitPrice
+  });
+
+  Product.insertProduct(product, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating new product."
+      });
+    else res.send(data);
+  });
+};
+
+function ValidateRequest(req, res) {
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  };
+};

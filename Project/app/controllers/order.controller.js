@@ -35,3 +35,30 @@ exports.findOrderByID = (req, res) => {
         };
   });
 };
+
+exports.insertOrder = (req, res) => {
+  ValidateRequest(req, res);
+
+  const order = new Order({
+    CustomerID: req.body.CustomerID,
+    EmployeeID: req.body.EmployeeID,
+    OrderDate: new Date()
+  });
+
+  Order.insertOrder(order, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating new order."
+      });
+    else res.send(data);
+  });
+};
+
+function ValidateRequest(req, res) {
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  };
+};

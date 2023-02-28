@@ -35,3 +35,32 @@ exports.findOrderDetailByOrderID = (req, res) => {
         };
   });
 };
+
+exports.insertOrderDetail = (req, res) => {
+  ValidateRequest(req, res);
+
+  const orderDetail = new OrderDetail({
+    OrderID: req.body.OrderID,
+    ProductID: req.body.ProductID,
+    UnitPrice: req.body.UnitPrice,
+    Quantity: req.body.Quantity,
+    Discount: req.body.Discount
+  });
+
+  OrderDetail.insertOrderDetail(orderDetail, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating new order detail."
+      });
+    else res.send(data);
+  });
+};
+
+function ValidateRequest(req, res) {
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  };
+};

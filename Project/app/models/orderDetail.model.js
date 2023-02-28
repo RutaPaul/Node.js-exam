@@ -29,8 +29,20 @@ OrderDetail.findOrderDetails = (orderID, result) => {
 
         result({ message: "not_found" }, null);
       });
-}
+};
 
+OrderDetail.insertOrderDetail = (newOrderDetail, result) => {
+  sql.query("INSERT INTO ORDER_DETAILS SET ?", newOrderDetail, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    console.log("created order detail: ", { id: res.insertId, ...newOrderDetail });
+    result(null, { id: res.insertId, ...newOrderDetail });
+  });
+};
 
 
 
