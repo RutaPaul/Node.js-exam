@@ -47,6 +47,28 @@ Employee.insertEmployee = (newEmployee, result) => {
   });
 };
 
+Employee.updateEmployee = (id, employee, result) => {
+  sql.query(
+    "UPDATE EMPLOYEES SET LastName = ?, FirstName = ?, Title = ?, TitleOfCourtesy = ?, BirthDate = ?, HireDate = ?, Address = ?, City = ? WHERE EmployeeID = ?",
+    [employee.LastName, employee.FirstName, employee.Title, employee.TitleOfCourtesy, employee.BirthDate, employee.HireDate, employee.Address, employee.City, id],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found employee with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("updated employee: ", { id: id, ...employee });
+      result(null, { id: id, ...employee });
+      }
+    );
+  };
 
 
 

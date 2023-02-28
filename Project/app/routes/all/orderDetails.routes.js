@@ -4,6 +4,7 @@ const startOrderDetailsRoutes = (app) => {
     router.get("/", orderDetail.findOrderDetails);
     router.get("/:id", orderDetail.findOrderDetailByOrderID);
     router.post("/", orderDetail.insertOrderDetail);
+    router.patch("/:id", orderDetail.updateOrderDetail);
     
 
     app.use('/api/v1/orderDetails', router);

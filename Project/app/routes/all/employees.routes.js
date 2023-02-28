@@ -4,6 +4,7 @@ const startEmployeesRoutes = (app) => {
     router.get("/", employee.findEmployees);
     router.get("/:id", employee.findEmployeeByID);
     router.post("/", employee.insertEmployee);
+    router.patch("/:id", employee.updateEmployee);
 
     app.use('/api/v1/employees', router);
 }

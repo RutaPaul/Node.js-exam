@@ -45,7 +45,7 @@ exports.insertOrderDetail = (req, res) => {
     UnitPrice: req.body.UnitPrice,
     Quantity: req.body.Quantity,
     Discount: req.body.Discount
-  });
+  }); 
 
   OrderDetail.insertOrderDetail(orderDetail, (err, data) => {
     if (err)
@@ -55,6 +55,28 @@ exports.insertOrderDetail = (req, res) => {
       });
     else res.send(data);
   });
+};
+
+exports.updateOrderDetail = (req, res) => {
+  ValidateRequest(req, res);
+
+  OrderDetail.updateOrderDetail(
+    req.params.id,
+    new OrderDetail(req.body),
+    (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found Order Detail with id ${req.params.id}.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error updating Order Detail with id " + req.params.id
+          });
+        }
+      } else res.send(data);
+    }
+  );
 };
 
 function ValidateRequest(req, res) {

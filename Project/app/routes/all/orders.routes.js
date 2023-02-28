@@ -4,8 +4,8 @@ const startOrdersRoutes = (app) => {
     router.get("/", order.findOrders);
     router.get("/:id", order.findOrderByID);
     router.post("/", order.insertOrder);
+    router.patch("/:id", order.updateOrder);
     
-
     app.use('/api/v1/orders', router);
 }
 

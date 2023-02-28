@@ -44,9 +44,28 @@ OrderDetail.insertOrderDetail = (newOrderDetail, result) => {
   });
 };
 
+OrderDetail.updateOrderDetail = (id, orderDetail, result) => {
+  sql.query(
+    "UPDATE ORDER_DETAILS SET ProductID = ?, UnitPrice = ?, Quantity = ?, Discount = ? WHERE OrderID = ?",
+    [orderDetail.ProductID, orderDetail.UnitPrice, orderDetail.Quantity, orderDetail.Discount, id],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
 
+      if (res.affectedRows == 0) {
+        // not found order detail with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
 
-
+      console.log("updated order detail: ", { id: id, ...orderDetail });
+      result(null, { id: id, ...orderDetail });
+      }
+    );
+  };
 
 
 module.exports = OrderDetail;

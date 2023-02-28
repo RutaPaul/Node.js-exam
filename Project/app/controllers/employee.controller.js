@@ -61,6 +61,28 @@ exports.insertEmployee = (req, res) => {
   });
 };
 
+exports.updateEmployee = (req, res) => {
+  ValidateRequest(req, res);
+
+  Employee.updateEmployee(
+    req.params.id,
+    new Employee(req.body),
+    (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found employee with id ${req.params.id}.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error updating employee with id " + req.params.id
+          });
+        }
+      } else res.send(data);
+    }
+  );
+};
+
 function ValidateRequest(req, res) {
   if (Object.keys(req.body).length === 0) {
     res.status(400).send({

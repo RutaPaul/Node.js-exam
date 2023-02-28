@@ -55,6 +55,28 @@ exports.insertOrder = (req, res) => {
   });
 };
 
+exports.updateOrder = (req, res) => {
+  ValidateRequest(req, res);
+
+  Order.updateOrder(
+    req.params.id,
+    new Order(req.body),
+    (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found order with id ${req.params.id}.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error updating order with id " + req.params.id
+          });
+        }
+      } else res.send(data);
+    }
+  );
+};
+
 function ValidateRequest(req, res) {
   if (Object.keys(req.body).length === 0) {
     res.status(400).send({

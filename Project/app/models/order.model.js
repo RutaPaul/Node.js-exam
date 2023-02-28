@@ -42,6 +42,28 @@ Order.insertOrder = (newOrder, result) => {
   });
 }
 
+Order.updateOrder = (id, order, result) => {
+  sql.query(
+    "UPDATE ORDERS SET CustomerID = ?, EmployeeID = ?, OrderDate = ? WHERE OrderID = ?",
+    [order.CustomerID, order.EmployeeID, order.OrderDate, id],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found order with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("updated order: ", { id: id, ...order });
+      result(null, { id: id, ...order });
+      }
+    );
+  };
 
 
 

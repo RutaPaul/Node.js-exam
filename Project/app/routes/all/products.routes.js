@@ -5,6 +5,7 @@ const startProductsRoutes = (app) => {
     router.get("/", product.findProducts);
     router.get("/:id", product.findProductByID);
     router.post("/", product.insertProduct);
+    router.patch("/:id", product.updateProduct);
     app.use('/api/v1/products', router);
 }
 

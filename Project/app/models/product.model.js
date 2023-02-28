@@ -44,4 +44,27 @@ Product.insertProduct = (newProduct, result) => {
   });
 };
 
+Product.updateProduct = (id, product, result) => {
+  sql.query(
+    "UPDATE PRODUCTS SET ProductName = ?, SupplierID = ?, CategoryID = ?, QuantityPerUnit = ?, UnitPrice = ? WHERE ProductID = ?",
+    [product.ProductName, product.SupplierID, product.CategoryID, product.QuantityPerUnit, product.UnitPrice, id],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found product with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("updated product: ", { id: id, ...product });
+      result(null, { id: id, ...product });
+      }
+    );
+  };
+  
 module.exports = Product;
