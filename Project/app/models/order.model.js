@@ -63,8 +63,24 @@ Order.updateOrder = (id, order, result) => {
       result(null, { id: id, ...order });
       }
     );
-  };
+};
 
+Order.deleteOrder = (id, result) => {
+  sql.query(`DELETE FROM ORDERS WHERE OrderID = ?`, id, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
 
+    if (res.affectedRows == 0) {
+      result({ kind: "not_found" }, null);
+      return;
+    }
+
+    console.log(`deleted order with id: `, id);
+    result(null, res);
+  });
+}
 
 module.exports = Order;

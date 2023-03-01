@@ -1,4 +1,5 @@
 const Employee = require("../models/employee.model.js");
+const MainController = require("./main.controller.js");
 
 exports.findEmployees = (req, res) => {
     Employee.findEmployees(null, (err, data) => {
@@ -37,7 +38,7 @@ exports.findEmployeeByID = (req, res) => {
 };
 
 exports.insertEmployee = (req, res) => {
-  ValidateRequest(req, res);
+  MainController.ValidateRequest(req, res);
 
   const employee = new Employee({
     EmployeeID: req.body.EmployeeID,
@@ -62,7 +63,7 @@ exports.insertEmployee = (req, res) => {
 };
 
 exports.updateEmployee = (req, res) => {
-  ValidateRequest(req, res);
+  MainController.ValidateRequest(req, res);
 
   Employee.updateEmployee(
     req.params.id,
@@ -83,10 +84,8 @@ exports.updateEmployee = (req, res) => {
   );
 };
 
-function ValidateRequest(req, res) {
-  if (Object.keys(req.body).length === 0) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-  };
+exports.deleteEmployee = (req, res) => {
+  Employee.deleteEmployee(req.params.id, (err, data) => {
+    MainController.HandleResponse(req, res, err, "Employee");
+  })
 };

@@ -65,6 +65,24 @@ Product.updateProduct = (id, product, result) => {
       result(null, { id: id, ...product });
       }
     );
-  };
+};
+
+Product.deleteProduct = (id, result) => {
+  sql.query(`DELETE FROM PRODUCTS WHERE ProductID = ?`, id, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    if (res.affectedRows == 0) {
+      result({ kind: "not_found" }, null);
+      return;
+    }
+
+    console.log(`deleted product with id: `, id);
+    result(null, res);
+  });
+}
   
 module.exports = Product;

@@ -68,7 +68,50 @@ Employee.updateEmployee = (id, employee, result) => {
       result(null, { id: id, ...employee });
       }
     );
-  };
+};
+
+Employee.deleteEmployee = (id, result) => {
+  
+  let queryOrderDetails = `DELETE ORDER_DETAILS FROM ORDER_DETAILS 
+  INNER JOIN ORDERS ON ORDERS.OrderID = ORDER_DETAILS.OrderID
+  WHERE ORDERS.EmployeeID = ${id}`;
+  sql.query(queryOrderDetails, (err, res)=>{
+    if(err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+    console.log(`deleted order details associated with employee`);
+
+    let queryOrders = `DELETE ORDERS FROM ORDERS
+    WHERE ORDERS.EmployeeID = ${id}`;
+    sql.query(queryOrders, (err,res)=>{
+      if(err){
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+      console.log(`deleted orders associated with employee`);
+
+      let queryEmployees = `DELETE FROM EMPLOYEES WHERE EmployeeID = ${id}`;
+      sql.query(queryEmployees, (err,res)=>{
+        if (err) {
+          console.log("error: ", err);
+          result(null, err);
+          return;
+        }
+    
+        if (res.affectedRows == 0) {
+          result({ kind: "not_found" }, null);
+          return;
+        }
+    
+        console.log(`deleted employee with id: `, id);
+        result(null, res);
+      })
+    })
+  })
+}
 
 
 

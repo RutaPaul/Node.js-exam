@@ -1,5 +1,7 @@
 
 const Product = require("../models/product.model.js");
+const OrderDetail = require("../models/orderDetail.model.js");
+const MainController = require("./main.controller.js");
 
 exports.findProducts = (req, res) => {
   Product.findProducts(null, (err, data) => {
@@ -38,7 +40,7 @@ exports.findProductByID = (req, res) => {
 };
 
 exports.insertProduct = (req, res) => {
-  ValidateRequest(req, res);
+  MainController.ValidateRequest(req, res);
 
   const product = new Product({
     ProductID: req.body.ProductID,
@@ -60,7 +62,7 @@ exports.insertProduct = (req, res) => {
 };
 
 exports.updateProduct = (req, res) => {
-  ValidateRequest(req, res);
+  MainController.ValidateRequest(req, res);
 
   Product.updateProduct(
     req.params.id,
@@ -81,10 +83,17 @@ exports.updateProduct = (req, res) => {
   );
 };
 
-function ValidateRequest(req, res) {
-  if (Object.keys(req.body).length === 0) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-  };
+exports.deleteProduct = (req, res) => {
+  OrderDetail.deleteOrderDetail(req.params.id, "ProductID", (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while deleting product."
+      });
+    else{
+      Product.deleteProduct(req.params.id, (err, data) => {
+        MainController.HandleResponse(req, res, err, "Product");
+      })
+    } 
+  })
 };
+

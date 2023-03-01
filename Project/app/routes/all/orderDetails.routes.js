@@ -5,8 +5,8 @@ const startOrderDetailsRoutes = (app) => {
     router.get("/:id", orderDetail.findOrderDetailByOrderID);
     router.post("/", orderDetail.insertOrderDetail);
     router.patch("/:id", orderDetail.updateOrderDetail);
+    router.delete("/:id/:deleteBy", orderDetail.deleteOrderDetail);
     
-
     app.use('/api/v1/orderDetails', router);
 }
 

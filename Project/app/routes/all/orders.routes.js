@@ -5,6 +5,7 @@ const startOrdersRoutes = (app) => {
     router.get("/:id", order.findOrderByID);
     router.post("/", order.insertOrder);
     router.patch("/:id", order.updateOrder);
+    router.delete("/:id", order.deleteOrder);
     
     app.use('/api/v1/orders', router);
 }

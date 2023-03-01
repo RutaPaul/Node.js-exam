@@ -1,4 +1,6 @@
 const Order = require("../models/order.model.js");
+const OrderDetail = require("../models/orderDetail.model.js");
+const MainController = require("./main.controller.js");
 
 exports.findOrders = (req, res) => {
     Order.findOrders(null, (err, data) => {
@@ -37,7 +39,7 @@ exports.findOrderByID = (req, res) => {
 };
 
 exports.insertOrder = (req, res) => {
-  ValidateRequest(req, res);
+  MainController.ValidateRequest(req, res);
 
   const order = new Order({
     CustomerID: req.body.CustomerID,
@@ -56,7 +58,7 @@ exports.insertOrder = (req, res) => {
 };
 
 exports.updateOrder = (req, res) => {
-  ValidateRequest(req, res);
+  MainController.ValidateRequest(req, res);
 
   Order.updateOrder(
     req.params.id,
@@ -77,10 +79,18 @@ exports.updateOrder = (req, res) => {
   );
 };
 
-function ValidateRequest(req, res) {
-  if (Object.keys(req.body).length === 0) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-  };
+exports.deleteOrder = (req, res) => {
+  OrderDetail.deleteOrderDetail(req.params.id, "OrderID", (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while deleting order."
+      });
+    else{
+      Order.deleteOrder(req.params.id, (err, data) => {
+        MainController.HandleResponse(req, res, err, "Order");
+      })
+    } 
+  })
 };
+
+
