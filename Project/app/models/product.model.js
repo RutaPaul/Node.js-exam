@@ -9,26 +9,25 @@ const Product = function(product) {
 };
 
 Product.findProducts = (id, result) => {
-
   let query = `SELECT * FROM PRODUCTS`;
   if(id){
     query += ` WHERE PRODUCTS.ProductID = ${id}`
   }
   sql.query(query, (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-  
-      if (res.length) {
-        console.log("found products: ", res);
-        result(null, res);
-        return;
-      }
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
 
-      result({ message: "not_found" }, null);
-    });
+    if (res.length) {
+      console.log("found products: ", res);
+      result(null, res);
+      return;
+    }
+
+    result({ message: "not_found" }, null);
+  });
 };
 
 Product.insertProduct = (newProduct, result) => {
@@ -83,6 +82,6 @@ Product.deleteProduct = (id, result) => {
     console.log(`deleted product with id: `, id);
     result(null, res);
   });
-}
+};
   
 module.exports = Product;

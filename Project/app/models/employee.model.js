@@ -1,37 +1,36 @@
 const sql = require("./db.js");
 const Employee = function(employee) {
-    this.EmployeeID = employee.EmployeeID;
-    this.LastName = employee.LastName;
-    this.FirstName = employee.FirstName;
-    this.Title = employee.Title;
-    this.TitleOfCourtesy = employee.TitleOfCourtesy;
-    this.BirthDate = employee.BirthDate;
-    this.HireDate = employee.HireDate;
-    this.Address = employee.Address;
-    this.City = employee.City;
+  this.EmployeeID = employee.EmployeeID;
+  this.LastName = employee.LastName;
+  this.FirstName = employee.FirstName;
+  this.Title = employee.Title;
+  this.TitleOfCourtesy = employee.TitleOfCourtesy;
+  this.BirthDate = employee.BirthDate;
+  this.HireDate = employee.HireDate;
+  this.Address = employee.Address;
+  this.City = employee.City;
 };
 
 Employee.findEmployees = (id, result) => {
-
-    let query = `SELECT * FROM EMPLOYEES`;
-    if(id){
-      query += ` WHERE EMPLOYEES.EmployeeID = ${id}`
+  let query = `SELECT * FROM EMPLOYEES`;
+  if(id){
+    query += ` WHERE EMPLOYEES.EmployeeID = ${id}`
+  }
+  sql.query(query, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
     }
-    sql.query(query, (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(err, null);
-          return;
-        }
-    
-        if (res.length) {
-          console.log("found employees: ", res);
-          result(null, res);
-          return;
-        }
 
-        result({ message: "not_found" }, null);
-      });
+    if (res.length) {
+      console.log("found employees: ", res);
+      result(null, res);
+      return;
+    }
+
+    result({ message: "not_found" }, null);
+  });
 };
 
 Employee.insertEmployee = (newEmployee, result) => {
@@ -71,7 +70,6 @@ Employee.updateEmployee = (id, employee, result) => {
 };
 
 Employee.deleteEmployee = (id, result) => {
-  
   let queryOrderDetails = `DELETE ORDER_DETAILS FROM ORDER_DETAILS 
   INNER JOIN ORDERS ON ORDERS.OrderID = ORDER_DETAILS.OrderID
   WHERE ORDERS.EmployeeID = ${id}`;
@@ -108,13 +106,9 @@ Employee.deleteEmployee = (id, result) => {
     
         console.log(`deleted employee with id: `, id);
         result(null, res);
-      })
-    })
-  })
-}
-
-
-
-
+      });
+    });
+  });
+};
 
 module.exports = Employee;

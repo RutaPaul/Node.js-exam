@@ -2,38 +2,30 @@ const Employee = require("../models/employee.model.js");
 const MainController = require("./main.controller.js");
 
 exports.findEmployees = (req, res) => {
-    Employee.findEmployees(null, (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-              res.status(404).send({
-                message: `Not found any employees`
-              });
-            } else {
-              res.status(500).send({
-                message: "Error retrieving employees"
-              });
-            }
-          } else {
-            res.send(data);
-          };
-    });
+  Employee.findEmployees(null, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+         res.status(404).send({message: `Not found any employees`});
+      } else {
+        res.status(500).send({message: "Error retrieving employees"});
+      }
+    } else {
+      res.send(data);
+    };
+  });
 };
 
 exports.findEmployeeByID = (req, res) => {
   Employee.findEmployees(req.params.id, (err, data) => {
-      if (err) {
-          if (err.kind === "not_found") {
-            res.status(404).send({
-              message: `Employee with ID: ${req.params.id} was not found`
-            });
-          } else {
-            res.status(500).send({
-              message: `Error retrieving employee with ID: ${req.params.id}`
-            });
-          }
-        } else {
-          res.send(data);
-        };
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({message: `Employee with ID: ${req.params.id} was not found`});
+      } else {
+        res.status(500).send({message: `Error retrieving employee with ID: ${req.params.id}`});
+      }
+    } else {
+      res.send(data);
+    };
   });
 };
 
@@ -54,10 +46,7 @@ exports.insertEmployee = (req, res) => {
 
   Employee.insertEmployee(employee, (err, data) => {
     if (err)
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating new employee."
-      });
+      res.status(500).send({message: err.message || "Some error occurred while creating new employee."});
     else res.send(data);
   });
 };
@@ -71,13 +60,9 @@ exports.updateEmployee = (req, res) => {
     (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
-          res.status(404).send({
-            message: `Not found employee with id ${req.params.id}.`
-          });
+          res.status(404).send({message: `Not found employee with id ${req.params.id}.`});
         } else {
-          res.status(500).send({
-            message: "Error updating employee with id " + req.params.id
-          });
+          res.status(500).send({message: "Error updating employee with id " + req.params.id});
         }
       } else res.send(data);
     }
@@ -87,5 +72,5 @@ exports.updateEmployee = (req, res) => {
 exports.deleteEmployee = (req, res) => {
   Employee.deleteEmployee(req.params.id, (err, data) => {
     MainController.HandleResponse(req, res, err, "Employee");
-  })
+  });
 };

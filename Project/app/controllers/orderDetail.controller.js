@@ -2,38 +2,30 @@ const OrderDetail = require("../models/orderDetail.model.js");
 const MainController = require("./main.controller.js");
 
 exports.findOrderDetails = (req, res) => {
-    OrderDetail.findOrderDetails(null, (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-              res.status(404).send({
-                message: `Not found any order details`
-              });
-            } else {
-              res.status(500).send({
-                message: "Error retrieving order details"
-              });
-            }
-          } else {
-            res.send(data);
-          };
-    });
+  OrderDetail.findOrderDetails(null, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({message: `Not found any order details`});
+      } else {
+        res.status(500).send({message: "Error retrieving order details"});
+      } 
+    } else {
+      res.send(data);
+    };
+  });
 };
 
 exports.findOrderDetailByOrderID = (req, res) => {
   OrderDetail.findOrderDetails(req.params.id, (err, data) => {
-      if (err) {
-          if (err.kind === "not_found") {
-            res.status(404).send({
-              message: `Order Detail with order ID: ${req.params.id} was not found`
-            });
-          } else {
-            res.status(500).send({
-              message: `Error retrieving order detail with order ID: ${req.params.id}`
-            });
-          }
-        } else {
-          res.send(data);
-        };
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({message: `Order Detail with order ID: ${req.params.id} was not found`});
+      } else {
+        res.status(500).send({message: `Error retrieving order detail with order ID: ${req.params.id}`});
+      }
+    } else {
+      res.send(data);
+    };
   });
 };
 
@@ -51,8 +43,7 @@ exports.insertOrderDetail = (req, res) => {
   OrderDetail.insertOrderDetail(orderDetail, (err, data) => {
     if (err)
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating new order detail."
+        message:err.message || "Some error occurred while creating new order detail."
       });
     else res.send(data);
   });
@@ -83,11 +74,9 @@ exports.updateOrderDetail = (req, res) => {
 exports.deleteOrderDetail = (req, res) => {
   OrderDetail.deleteOrderDetail(req.params.id, req.params.deleteBy, (err, data) => {
     if (err)
-      res.status(500).send({
-        message: err.message || "Some error occurred while deleting order detail."
-      });
-    else{
+      res.status(500).send({message: err.message || "Some error occurred while deleting order detail."});
+    else { 
       res.send({ message: `Order detail was deleted successfully!` });
-    }
-})
-}
+    };
+});
+};
